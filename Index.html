@@ -201,6 +201,7 @@ Nivel principal
           _localId: uid(),
           id: '',
           name,
+          isLockedRoot: false,
           children: []
         };
       }
@@ -239,7 +240,7 @@ Nivel principal
         setStatus('Cargando jerarquía...', false);
         google.script.run
           .withSuccessHandler((rootNode) => {
-            treeData = [decorateNode(rootNode)];
+            treeData = [decorateNode(rootNode, true)];
             renderTree();
             setStatus('Jerarquía cargada desde Drive.', false);
           })
@@ -303,12 +304,13 @@ Nivel principal
         return null;
       }
 
-      function decorateNode(node) {
+      function decorateNode(node, isLockedRoot) {
         return {
           _localId: uid(),
           id: node.id || '',
           name: node.name || '',
-          children: Array.isArray(node.children) ? node.children.map(decorateNode) : []
+          isLockedRoot: Boolean(isLockedRoot),
+          children: Array.isArray(node.children) ? node.children.map((child) => decorateNode(child, false)) : []
         };
       }
 
@@ -349,6 +351,10 @@ Nivel principal
         input.value = node.name;
         input.placeholder = 'Nombre de carpeta';
         input.oninput = (e) => updateNodeName(node._localId, e.target.value);
+        input.disabled = node.isLockedRoot;
+        if (node.isLockedRoot) {
+          input.title = 'La carpeta raíz cargada desde Drive no se puede renombrar aquí.';
+        }
 
         const addLevel = document.createElement('button');
         addLevel.className = 'btn-secondary';
@@ -367,8 +373,10 @@ Nivel principal
 
         line.appendChild(input);
         line.appendChild(addLevel);
-        line.appendChild(addSame);
-        line.appendChild(del);
+        if (!node.isLockedRoot) {
+          line.appendChild(addSame);
+          line.appendChild(del);
+        }
 
         container.appendChild(line);
 

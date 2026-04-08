@@ -10,7 +10,9 @@ Aplicación en **Google Apps Script** para crear y actualizar carpetas de Google
 - Importar estructura desde texto con guiones (`-`, `--`, `---`, etc.).
 - Listar carpetas raíz de "Mi unidad".
 - Cargar una carpeta existente y reconstruir su jerarquía en pantalla.
+- Al cargar una carpeta existente, el nodo raíz queda bloqueado para evitar renombrados o borrados accidentales.
 - Generar o actualizar estructura (crea faltantes, reutiliza existentes y renombra por ID cuando corresponde).
+- Validación de duplicados por nombre dentro del mismo padre para evitar ambigüedad al reutilizar carpetas.
 
 ## Archivos
 

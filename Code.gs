@@ -136,8 +136,17 @@ function upsertChildren_(parentFolder, nodes, counters) {
 
     if (!folder) {
       var existing = parentFolder.getFoldersByName(name);
-      if (existing.hasNext()) {
-        folder = existing.next();
+      var matches = [];
+      while (existing.hasNext()) {
+        matches.push(existing.next());
+      }
+
+      if (matches.length > 1) {
+        throw new Error('Carpetas duplicadas encontradas bajo "' + parentFolder.getName() + '": ' + name);
+      }
+
+      if (matches.length === 1) {
+        folder = matches[0];
         counters.reused++;
       } else {
         folder = parentFolder.createFolder(name);
