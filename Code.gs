@@ -17,6 +17,14 @@ function include(filename) {
 }
 
 /**
+ * Returns the active user email.
+ * @returns {string}
+ */
+function getUserEmail() {
+  return Session.getActiveUser().getEmail();
+}
+
+/**
  * Returns root-level folders in My Drive.
  * @returns {{id: string, name: string}[]}
  */

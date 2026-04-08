@@ -467,6 +467,10 @@ Nivel principal
         setStatus('Error: ' + (err && err.message ? err.message : err), true);
       }
 
+      google.script.run.withSuccessHandler((email) => {
+        console.log('Usuario:', email);
+      }).getUserEmail();
+
       refreshRootFolders();
       renderTree();
     </script>
